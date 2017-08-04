@@ -1,0 +1,13 @@
+{
+  "requirements": {
+    "ruby": "2.0.0"
+  },
+  "commands": [
+    {
+      "name": "certs",
+      "aliases": ["cps"],
+      "version": "0.3.0",
+      "description": "Manage Secure CDN certificates"
+    }
+  ]
+}

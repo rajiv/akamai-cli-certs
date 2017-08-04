@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    akamai-api-cps (0.3.0)
+      akamai-edgegrid (~> 1.0)
+    akamai-edgegrid (1.0.6)
+      inifile (~> 3.0)
+    gli (2.16.1)
+    inifile (3.0.0)
+    table_print (1.5.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  akamai-api-cps
+  gli
+  table_print
+
+BUNDLED WITH
+   1.15.4

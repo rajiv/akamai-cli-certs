@@ -1,0 +1,120 @@
+#!/usr/bin/env ruby
+require 'akamai/api/cps'
+require 'gli'
+require 'json'
+require 'openssl'
+require 'table_print'
+
+include GLI::App
+
+program_desc 'Manage Secure CDN certificates'
+sort_help :manually
+version '0.3.0'
+
+unless OpenSSL::X509::Name.instance_methods.include? :cn
+  module OpenSSL
+    module X509
+      class Name
+        def cn
+          to_a.select { |name, _, _| name == 'CN' }.first[1]
+        end
+      end
+    end
+  end
+end
+
+
+pre do
+  @client = Akamai::API::CPS.new
+end
+
+desc 'List certificates for a contract'
+arg_name 'contract_id'
+command :list do |c|
+  c.action do |_, _, args|
+    help_now!('contract_id is required') if args.empty?
+    contract_id = args.shift
+
+    puts "Fetching certificates for Contract ID #{contract_id}"
+    enrollments = @client.enrollments(contract_id)
+    puts
+
+    tp enrollments,
+        { ID: lambda { |e| e.location.split('/').last } },
+        { 'csr.cn': { width: 50 } },
+        { SANs: lambda { |e| e.csr.sans.count } },
+        { Expires: lambda { |e|
+          c = @client.production_certificate(e.location.split('/').last)
+          c.nil? ? 'unknown' : c.not_after } }
+  end
+end
+
+desc 'Show detailed information for an enrollment'
+arg_name 'enrollment_id'
+command :info do |c|
+  c.action do |_, _, args|
+    help_now!('enrollment_id is required') if args.empty?
+    enrollment_id = args.shift.to_i
+
+    puts "Fetching certificate details for enrollment #{enrollment_id}"
+    staging_cert = @client.staging_certificate(enrollment_id)
+    prod_cert = @client.production_certificate(enrollment_id)
+    puts
+
+    if staging_cert.nil? || prod_cert.nil?
+      exit_now!("Enrollment #{enrollment_id} not found, or no certificate deployed")
+    end
+
+    puts 'Staging --------------------------------'
+    puts "Common Name: #{staging_cert.subject.cn}"
+    puts "Subject:     #{staging_cert.subject}"
+    puts "Expires:     #{staging_cert.not_after}"
+    puts "Issuer:      #{staging_cert.issuer}"
+    puts
+    puts 'Production -----------------------------'
+    puts "Common Name: #{prod_cert.subject.cn}"
+    puts "Subject:     #{prod_cert.subject}"
+    puts "Expires:     #{prod_cert.not_after}"
+    puts "Issuer:      #{prod_cert.issuer}"
+  end
+end
+
+desc 'Print the end-entity (leaf) certificate for an enrollment in PEM format'
+arg_name 'enrollment_id'
+command :leaf do |c|
+  c.action do |_, _, args|
+    help_now!('enrollment_id is required') if args.empty?
+    enrollment_id = args.shift.to_i
+
+    puts "Fetching production certificate for enrollment #{enrollment_id}"
+    cert = @client.production_certificate(enrollment_id)
+    puts
+
+    if cert.nil?
+      exit_now!("Enrollment #{enrollment_id} not found, or no certificate deployed")
+    end
+
+    puts cert
+  end
+end
+
+desc 'Print the certificate and trust chain for an enrollment in PEM format'
+arg_name 'enrollment_id'
+command :chain do |c|
+  c.action do |_, _, args|
+    help_now!('enrollment_id is required') if args.empty?
+    enrollment_id = args.shift.to_i
+
+    puts "Fetching production certificate chain for enrollment #{enrollment_id}"
+    chain = @client.production_full_chain(enrollment_id)
+    puts
+
+    if chain.nil?
+      exit_now!("Enrollment #{enrollment_id} not found, or no certificate deployed")
+    end
+
+    puts chain
+  end
+end
+
+exit run(ARGV)
