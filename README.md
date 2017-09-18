@@ -6,7 +6,7 @@ https://github.com/rajiv/akamai-cli-certs
 
 ## Install
 
-First, install the [Akamai CLI](https://github.com/akamai/cli). Then install this plugin:
+First, install the [Akamai CLI](https://github.com/akamai/cli). Next, setup `.edgerc` as detailed in the [AkamaiOPEN-edgegrid-ruby](https://github.com/akamai/AkamaiOPEN-edgegrid-ruby) gem instructions. Then install this plugin:
 
     $ akamai install rajiv/akamai-cli-certs
 
@@ -23,6 +23,12 @@ To update to the latest version:
 To list certificates for a given contract:
 
     $ akamai certs list <contract_id>
+
+#### List ciphers
+
+To list ciphers for all certificates on a given contract:
+
+    $ akamai certs ciphers <contract_id>
 
 #### Certificate information
 

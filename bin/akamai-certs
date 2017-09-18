@@ -9,7 +9,7 @@ include GLI::App
 
 program_desc 'Manage Secure CDN certificates'
 sort_help :manually
-version '0.3.0'
+version '0.3.1'
 
 unless OpenSSL::X509::Name.instance_methods.include? :cn
   module OpenSSL
@@ -46,6 +46,25 @@ command :list do |c|
         { Expires: lambda { |e|
           c = @client.production_certificate(e.location.split('/').last)
           c.nil? ? 'unknown' : c.not_after } }
+  end
+end
+
+desc 'List ciphers for all certificates on a contract'
+arg_name 'contract_id'
+command :ciphers do |c|
+  c.action do |_, _, args|
+    help_now!('contract_id is required') if args.empty?
+    contract_id = args.shift
+
+    puts "Fetching certificates for Contract ID #{contract_id}"
+    enrollments = @client.enrollments(contract_id)
+    puts
+
+    tp enrollments,
+        { id: lambda { |e| e.location.split('/').last } },
+        { cn: { display_method: :'csr.cn', width: 50 } },
+        { must_have: lambda { |e| e.networkConfiguration.mustHaveCiphers } },
+        { preferred: lambda { |e| e.networkConfiguration.preferredCiphers } }
   end
 end
 
