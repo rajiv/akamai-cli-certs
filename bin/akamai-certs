@@ -41,7 +41,7 @@ command :list do |c|
 
     tp enrollments,
         { ID: lambda { |e| e.location.split('/').last } },
-        { 'csr.cn': { width: 50 } },
+        { cn: { display_method: :'csr.cn', width: 50 } },
         { SANs: lambda { |e| e.csr.sans.count } },
         { Expires: lambda { |e|
           c = @client.production_certificate(e.location.split('/').last)
