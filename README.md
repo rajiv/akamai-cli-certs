@@ -18,6 +18,10 @@ To update to the latest version:
 
 ## Usage
 
+All commands support global options to specify an edgerc file and configuration section:
+
+    $ akamai certs --edgerc='~/.edgerc-qa' --section='cps'
+
 #### List certificates
 
 To list certificates for a given contract:

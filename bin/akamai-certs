@@ -11,6 +11,9 @@ program_desc 'Manage Secure CDN certificates'
 sort_help :manually
 version '0.3.1'
 
+flag [:edgerc], default_value: File.join(ENV['HOME'], '.edgerc')
+flag [:section], default_value: 'default'
+
 unless OpenSSL::X509::Name.instance_methods.include? :cn
   module OpenSSL
     module X509
@@ -24,8 +27,9 @@ unless OpenSSL::X509::Name.instance_methods.include? :cn
 end
 
 
-pre do
-  @client = Akamai::API::CPS.new
+pre do |global_options|
+  @client = Akamai::API::CPS.new(edgerc: global_options[:edgerc],
+    section: global_options[:section])
 end
 
 desc 'List certificates for a contract'
