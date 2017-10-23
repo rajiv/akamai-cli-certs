@@ -82,26 +82,22 @@ To list ciphers for all certificates on a given contract:
 
 To get detailed information for a certificate, by enrollment ID:
 
-    $ akamai certs info <enrollment_id>
-    Fetching certificate details for enrollment 90075
+    $ akamai certs info [--staging] <enrollment_id>
+    Fetching production certificate details for enrollment 90075
 
-    Staging --------------------------------
-    Common Name: san-001.example.com
-    Subject:     /CN=san-001.example.com
-    Expires:     2018-12-24 23:59:59 UTC
-    Issuer:      /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
-
-    Production -----------------------------
+    Network:     production
     Common Name: san-001.example.com
     Subject:     /CN=san-001.example.com
     Expires:     2018-10-24 23:59:59 UTC
     Issuer:      /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
 
+This command defaults to showing information from production, and takes an optional `--staging` flag to display information from the certificate deployed on the staging network.
+
 #### Download the end-entity (leaf) certificate for an enrollment
 
 To print the end-entity (leaf) certificate for a deployed certificate in production, by enrollment ID:
 
-    $ akamai certs leaf <enrollment_id>
+    $ akamai certs leaf [--staging] <enrollment_id>
     Fetching production certificate for enrollment 90075
 
     -----BEGIN CERTIFICATE-----
@@ -111,7 +107,9 @@ To print the end-entity (leaf) certificate for a deployed certificate in product
     ...
     -----END CERTIFICATE-----
 
-The certificate is printed in PEM format. This command can be used to view the parsed certificate:
+The certificate is printed in PEM format. This command defaults to showing information from production, and takes an optional `--staging` flag to display information from the certificate deployed on the staging network.
+
+This command can be used to view the parsed certificate:
 
     $ akamai certs leaf <enrollment_id> | openssl x509 -noout -text
 
@@ -123,7 +121,7 @@ And to print the SHA-256 hash of the certificate's public key:
 
 To print the certificate and trust chain for a deployed certificate in production, by enrollment ID:
 
-    $ akamai certs chain <enrollment_id>
+    $ akamai certs chain [--staging] <enrollment_id>
     Fetching production certificate chain for enrollment 90075
 
     -----BEGIN CERTIFICATE-----
@@ -139,7 +137,7 @@ To print the certificate and trust chain for a deployed certificate in productio
     ...
     -----END CERTIFICATE-----
 
-The certificates are printed in PEM format, with the end-entity certificate first.
+The certificates are printed in PEM format, with the end-entity certificate first. This command defaults to showing information from production, and takes an optional `--staging` flag to display information from the certificate deployed on the staging network.
 
 
 ## Authors

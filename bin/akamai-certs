@@ -75,42 +75,50 @@ end
 desc 'Show detailed information for an enrollment'
 arg_name 'enrollment_id'
 command :info do |c|
-  c.action do |_, _, args|
+  c.switch :staging, desc: 'Display certificate information from the staging network', negatable: false
+  c.action do |_, options, args|
     help_now!('enrollment_id is required') if args.empty?
     enrollment_id = args.shift.to_i
 
-    puts "Fetching certificate details for enrollment #{enrollment_id}"
-    staging_cert = @client.staging_certificate(enrollment_id)
-    prod_cert = @client.production_certificate(enrollment_id)
+    if options[:staging]
+      env = 'staging'
+      puts "Fetching staging certificate details for enrollment #{enrollment_id}"
+      cert = @client.staging_certificate(enrollment_id)
+    else
+      env = 'production'
+      puts "Fetching production certificate details for enrollment #{enrollment_id}"
+      cert = @client.production_certificate(enrollment_id)
+    end
     puts
 
-    if staging_cert.nil? || prod_cert.nil?
+    if cert.nil?
       exit_now!("Enrollment #{enrollment_id} not found, or no certificate deployed")
     end
 
-    puts 'Staging --------------------------------'
-    puts "Common Name: #{staging_cert.subject.cn}"
-    puts "Subject:     #{staging_cert.subject}"
-    puts "Expires:     #{staging_cert.not_after}"
-    puts "Issuer:      #{staging_cert.issuer}"
-    puts
-    puts 'Production -----------------------------'
-    puts "Common Name: #{prod_cert.subject.cn}"
-    puts "Subject:     #{prod_cert.subject}"
-    puts "Expires:     #{prod_cert.not_after}"
-    puts "Issuer:      #{prod_cert.issuer}"
+    # puts 'Staging --------------------------------'
+    puts "Network:     #{env}"
+    puts "Common Name: #{cert.subject.cn}"
+    puts "Subject:     #{cert.subject}"
+    puts "Expires:     #{cert.not_after}"
+    puts "Issuer:      #{cert.issuer}"
   end
 end
 
 desc 'Print the end-entity (leaf) certificate for an enrollment in PEM format'
 arg_name 'enrollment_id'
 command :leaf do |c|
-  c.action do |_, _, args|
+  c.switch :staging, desc: 'Display certificate information from the staging network', negatable: false
+  c.action do |_, options, args|
     help_now!('enrollment_id is required') if args.empty?
     enrollment_id = args.shift.to_i
 
-    puts "Fetching production certificate for enrollment #{enrollment_id}"
-    cert = @client.production_certificate(enrollment_id)
+    if options[:staging]
+      puts "Fetching staging certificate for enrollment #{enrollment_id}"
+      cert = @client.staging_certificate(enrollment_id)
+    else
+      puts "Fetching production certificate for enrollment #{enrollment_id}"
+      cert = @client.production_certificate(enrollment_id)
+    end
     puts
 
     if cert.nil?
@@ -124,12 +132,18 @@ end
 desc 'Print the certificate and trust chain for an enrollment in PEM format'
 arg_name 'enrollment_id'
 command :chain do |c|
-  c.action do |_, _, args|
+  c.switch :staging, desc: 'Display certificate information from the staging network', negatable: false
+  c.action do |_, options, args|
     help_now!('enrollment_id is required') if args.empty?
     enrollment_id = args.shift.to_i
 
-    puts "Fetching production certificate chain for enrollment #{enrollment_id}"
-    chain = @client.production_full_chain(enrollment_id)
+    if options[:staging]
+      puts "Fetching staging certificate chain for enrollment #{enrollment_id}"
+      chain = @client.staging_full_chain(enrollment_id)
+    else
+      puts "Fetching production certificate chain for enrollment #{enrollment_id}"
+      chain = @client.production_full_chain(enrollment_id)
+    end
     puts
 
     if chain.nil?
