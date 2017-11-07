@@ -88,6 +88,7 @@ To get detailed information for a certificate, by enrollment ID:
     Network:     production
     Common Name: san-001.example.com
     Subject:     /CN=san-001.example.com
+    Not Before:  2018-07-25 21:03:46 UTC
     Expires:     2018-10-24 23:59:59 UTC
     Issuer:      /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
 

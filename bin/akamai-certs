@@ -98,6 +98,7 @@ command :info do |c|
     puts "Network:     #{env}"
     puts "Common Name: #{cert.subject.cn}"
     puts "Subject:     #{cert.subject}"
+    puts "Not Before:  #{cert.not_before}"
     puts "Expires:     #{cert.not_after}"
     puts "Issuer:      #{cert.issuer}"
   end
