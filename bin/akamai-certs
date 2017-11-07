@@ -95,7 +95,6 @@ command :info do |c|
       exit_now!("Enrollment #{enrollment_id} not found, or no certificate deployed")
     end
 
-    # puts 'Staging --------------------------------'
     puts "Network:     #{env}"
     puts "Common Name: #{cert.subject.cn}"
     puts "Subject:     #{cert.subject}"

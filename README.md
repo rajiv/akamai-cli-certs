@@ -119,7 +119,7 @@ And to print the SHA-256 hash of the certificate's public key:
 
 #### Download the certificate and trust chain for an enrollment
 
-To print the certificate and trust chain for a deployed certificate in production, by enrollment ID:
+To print the certificate and trust chain for a deployed certificate, by enrollment ID:
 
     $ akamai certs chain [--staging] <enrollment_id>
     Fetching production certificate chain for enrollment 90075
