@@ -91,6 +91,15 @@ To get detailed information for a certificate, by enrollment ID:
     Not Before:  2018-07-25 21:03:46 UTC
     Expires:     2018-10-24 23:59:59 UTC
     Issuer:      /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3
+    SANs:        82
+                 example.com
+                 example.net
+                 example.org
+                 san-001.example.com
+                 www.example.com
+                 www.example.net
+                 www.example.org
+                 ...
 
 This command defaults to showing information from production, and takes an optional `--staging` flag to display information from the certificate deployed on the staging network.
 

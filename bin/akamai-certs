@@ -26,6 +26,19 @@ unless OpenSSL::X509::Name.instance_methods.include? :cn
   end
 end
 
+unless OpenSSL::X509::Certificate.instance_methods.include? :sans
+  module OpenSSL
+    module X509
+      class Certificate
+        def sans
+          san_ext = extensions.select { |e| e.oid == 'subjectAltName' }.first
+          return [] if san_ext.nil?
+          san_ext.value.split(', ')
+        end
+      end
+    end
+  end
+end
 
 pre do |global_options|
   @client = Akamai::API::CPS.new(edgerc: global_options[:edgerc],
@@ -101,6 +114,8 @@ command :info do |c|
     puts "Not Before:  #{cert.not_before}"
     puts "Expires:     #{cert.not_after}"
     puts "Issuer:      #{cert.issuer}"
+    puts "SANs:        #{cert.sans.count}"
+    cert.sans.sort.each { |san| puts "             #{san.sub('DNS:', '')}" }
   end
 end
 
