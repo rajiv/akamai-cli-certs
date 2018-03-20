@@ -4,11 +4,24 @@ A plugin for the [Akamai CLI](https://github.com/akamai/cli) to perform certific
 
 https://github.com/rajiv/akamai-cli-certs
 
+## Requirements
+
+* Ruby 2.0.0 or higher
+* [Bundler](http://bundler.io/)
+
+This plugin requires a working [Bundler](http://bundler.io/) setup which can install [RubyGems](https://rubygems.org/) as a non-root user. [rbenv](https://github.com/rbenv/rbenv) is also recommended but not required.
+
 ## Install
 
-First, install the [Akamai CLI](https://github.com/akamai/cli). Next, setup `.edgerc` as detailed in the [AkamaiOPEN-edgegrid-ruby](https://github.com/akamai/AkamaiOPEN-edgegrid-ruby) gem instructions. Then install this plugin:
+1. Install the [Akamai CLI](https://github.com/akamai/cli).
 
-    $ akamai install rajiv/akamai-cli-certs
+2. Obtain API credentials through the Akamai Luna Portal. See details in [Authorize Your Client](https://developer.akamai.com/introduction/Prov_Creds.html) in the Akamai Developer [Get Started](https://developer.akamai.com/introduction/) guide.
+
+3. Setup a standard Akamai OPEN credentials `~/.edgerc` file as detailed in the [AkamaiOPEN-edgegrid-ruby](https://github.com/akamai/AkamaiOPEN-edgegrid-ruby) gem instructions and [Configure Your Credentials](https://developer.akamai.com/introduction/Conf_Client.html).
+
+4. Install this plugin:
+
+        $ akamai install rajiv/akamai-cli-certs
 
 ## Updating
 
@@ -156,7 +169,7 @@ Authored by [Rajiv Aaron Manglani](https://www.rajivmanglani.com/).
 
 ## License
 
-Copyright 2017 Akamai Technologies, Inc. All rights reserved.
+Copyright 2017-2018 Akamai Technologies, Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
