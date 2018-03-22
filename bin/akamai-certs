@@ -9,7 +9,7 @@ include GLI::App
 
 program_desc 'Manage Secure CDN certificates'
 sort_help :manually
-version '0.4.0'
+version '0.4.1'
 
 flag [:edgerc], default_value: File.join(ENV['HOME'], '.edgerc')
 flag [:section], default_value: 'default'

@@ -39,7 +39,7 @@ To update to the latest version:
         akamai-certs [global options] command [command options] [arguments...]
 
     VERSION
-        0.4.0
+        0.4.1
 
     GLOBAL OPTIONS
         --edgerc=arg  - (default: /Users/user/.edgerc)
